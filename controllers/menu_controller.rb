@@ -14,7 +14,8 @@ class MenuController
     puts "3 - Search for an entry"
     puts "4 - Import entries from a CSV"
     puts "5 - View entry number 'n'"
-    puts "6 - Exit"
+    puts "6 - Clear all entries"
+    puts "7 - Exit"
     print "Enter your selection: "
 
     selection = gets.to_i
@@ -40,6 +41,10 @@ class MenuController
       view_entry_n
       main_menu
     when 6
+      system "clear"
+      nuke_entries
+      main_menu
+    when 7
       puts "Good-bye!"
       exit(0)
     else
@@ -203,5 +208,21 @@ class MenuController
     system "clear"
     puts "Updated entry: "
     puts entry
+  end
+
+  def nuke_entries
+    print "This cannot be undone. Please type 'nuke' without quotes to confirm: "
+    input = gets.chomp
+    if input == "nuke"
+      while address_book.entries.count > 0
+        entry = address_book.entries[0]
+        address_book.remove_entry(entry.name, entry.phone_number, entry.email)
+      end
+      puts "All entries were deleted!"
+    else
+      puts "Invalid input, address book will not be modified."
+    end
+    puts "Press Enter to continue."
+    gets
   end
 end
